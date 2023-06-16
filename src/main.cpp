@@ -1,18 +1,34 @@
+
+/* Bibliotheken */
 #include <Arduino.h>
+#include "TempUndHum.h"
+#include "Lufqualität.h"
 
-// put function declarations here:
-int myFunction(int, int);
+/* Defines */
+#define DHTPIN 2
+#define MQPIN 0
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+/* Globale Variablen */
+float temp;
+float humi;
+TempUndHum dht(DHTPIN);
+Lufqualitaet LQuali(MQPIN, &temp, &humi);
+
+void setup()
+{
+  Serial.begin(9600);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+void loop()
+{
+  temp = 23.70;
+  humi = 44.00;
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  LQuali.readSensor();
+  Serial.print("PPM: ");
+  Serial.println(LQuali.get_ppm());
+  Serial.print("Corrected PPM: ");
+  Serial.println(LQuali.get_correctedppm());
+
+  delay(5000);
 }
