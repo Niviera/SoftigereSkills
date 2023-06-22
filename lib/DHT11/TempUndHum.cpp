@@ -18,7 +18,7 @@ bool TempUndHum::readSensor()
         this->error = 10;
         return false;
     }
-    int test;
+
     return true;
 }
 

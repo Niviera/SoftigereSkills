@@ -1,4 +1,4 @@
-#include "Lufqualität.h"
+#include "Lufqualitaet.h"
 
 bool Lufqualitaet::readSensor()
 {
