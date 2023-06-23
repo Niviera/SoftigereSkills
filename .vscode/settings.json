@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "cmath": "cpp"
+        "*.embeddedhtml": "html",
+        "cmath": "cpp",
+        "random": "cpp"
     }
 }
