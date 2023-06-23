@@ -12,10 +12,7 @@
 #define RECEIVER true
 
 /* Globale Variablen */
-float temp;
-float humi;
 TempUndHum Temp(DHTPIN);
-
 uint8_t broadcastAddress[] = {0xC8, 0xC9, 0xA3, 0x54, 0x88, 0xBB};
 
 // Structure example to send data
