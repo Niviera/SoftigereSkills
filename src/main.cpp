@@ -94,6 +94,7 @@ void setup()
     return;
   }
 
+  /* Specific Setup*/
   if (RECEIVER)
   {
     /* Setup Reciecver */
