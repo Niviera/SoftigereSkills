@@ -33,19 +33,13 @@ typedef struct struct_message
 struct_message myData;
 esp_now_peer_info_t peerInfo;
 
-// callback when data is sent
-void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
-{
-  Serial.print("\r\nLast Packet Send Status:\t");
-  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-}
-/* callback when data is recieved */
+/* Funktion for Reciever*/
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
 {
   memcpy(&myData, incomingData, sizeof(myData));
 }
 
-/* */
+/* Funktionen for Sender */
 void collect_Data()
 {
   /* Lese DHT11 aus */
@@ -81,7 +75,13 @@ void send_Data()
     Serial.println("Error sending the data");
   }
 }
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
+{
+  Serial.print("\r\nLast Packet Send Status:\t");
+  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+}
 
+/* Controller */
 void setup()
 {
   /* Allgemeines Setup */
@@ -114,7 +114,6 @@ void setup()
       return;
     }
   }
-
 }
 
 void loop()
