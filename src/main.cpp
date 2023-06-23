@@ -115,14 +115,6 @@ void setup()
     }
   }
 
-  // Init ESP-NOW
-
-  // Once ESPNow is successfully Init, we will register for Send CB to
-  // get the status of Trasnmitted packet
-
-  // Register peer
-
-  // Add peer
 }
 
 void loop()
