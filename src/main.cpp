@@ -2,9 +2,10 @@
 /* Bibliotheken */
 #include <Arduino.h>
 #include "TempUndHum.h"
-
 #include <WiFi.h>
 #include <esp_now.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
 
 /* Defines */
 #define DHTPIN 2
@@ -29,11 +30,28 @@ typedef struct struct_message
 // Create a struct_message called myData
 struct_message myData;
 esp_now_peer_info_t peerInfo;
+//Initialization of OLED
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 /* Funktion for Reciever*/
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
 {
   memcpy(&myData, incomingData, sizeof(myData));
+  Serial.print("CO2: ");
+  Serial.println(myData.co2);
+  Serial.print("Humidity: ");
+  Serial.println(myData.humidity);
+  Serial.print("Temperature: ");
+  Serial.println(myData.temperatur);
+  Serial.print("Rain: ");
+  Serial.println(myData.rain);
+  Serial.print("Brightness: ");
+  Serial.println(myData.brightness);
+  Serial.println();
 }
 
 /* Funktionen for Sender */
@@ -77,6 +95,8 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
+
+
 
 /* Controller */
 void setup()
@@ -126,6 +146,27 @@ void loop()
     collect_Data();
     send_Data();
   }
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
+      Serial.println(F("SSD1306 allocation failed"));
+      for(;;);
+    }
+  delay(2000);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.println("Temp.: " + String(myData.temperatur,2)+"C°");
+  display.setCursor(0,15);
+  display.println("Hum.: " + String(myData.humidity,2)+"%");
+  display.setCursor(0,30);
+  if (myData.brightness>30){
+     display.println("Brightn.: Tag");
+  }else{
+    display.println("Brightn.: Nacht");
+  } 
+  display.setCursor(0,45);
+  display.println("Rain: " + String(myData.humidity,2)+"%");
+  display.display(); 
 
   delay(5000);
 }
