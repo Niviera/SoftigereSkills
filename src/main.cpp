@@ -165,7 +165,15 @@ void loop()
     display.println("Brightn.: Nacht");
   } 
   display.setCursor(0,45);
-  display.println("Rain: " + String(myData.humidity,2)+"%");
+  if (myData.rain==0){
+     display.println("Kein Regen");
+  }else if (myData.rain>0&&myData.rain<70){
+    display.println("Regen");
+  }else{
+    display.println("Starker Regen");
+  } 
+  display.setCursor(0,60);
+  display.println("CO2: " + String(myData.co2,2)+"ppm");
   display.display(); 
 
   delay(5000);
