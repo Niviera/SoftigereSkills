@@ -1,4 +1,3 @@
-
 /* Bibliotheken */
 #include <Arduino.h>
 #include "TempUndHum.h"
@@ -41,6 +40,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
 {
   memcpy(&myData, incomingData, sizeof(myData));
+  /* Debug der Sensoren ohne OLED
   Serial.print("CO2: ");
   Serial.println(myData.co2);
   Serial.print("Humidity: ");
@@ -52,6 +52,7 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
   Serial.print("Brightness: ");
   Serial.println(myData.brightness);
   Serial.println();
+  */
 }
 
 /* Funktionen for Sender */
@@ -77,6 +78,7 @@ void collect_Data()
 
   myData.rain = 0;
 }
+
 void send_Data()
 {
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
@@ -139,14 +141,7 @@ void loop()
   if (RECEIVER)
   {
     /* Alles was der Empfänger machen soll */
-  }
-  else
-  {
-    /* Alles was der Sender machen soll*/
-    collect_Data();
-    send_Data();
-  }
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
+    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
       Serial.println(F("SSD1306 allocation failed"));
       for(;;);
     }
@@ -177,4 +172,12 @@ void loop()
   display.display(); 
 
   delay(5000);
+  }
+  else
+  {
+    /* Alles was der Sender machen soll*/
+    collect_Data();
+    send_Data();
+  }
+  
 }
